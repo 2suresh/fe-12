@@ -44,7 +44,10 @@ const StartBroadcast = () => {
 
   const startRecording = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      });
       videoRef.current.srcObject = stream;
       videoRef.current.play();
 
@@ -59,6 +62,10 @@ const StartBroadcast = () => {
             await fetch('http://localhost:5555/upload-chunk', {
               method: 'POST',
               body: formData,
+              headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Credentials': 'true',
+              },
             });
             console.log('Chunk sent to server');
           } catch (err) {
@@ -77,9 +84,18 @@ const StartBroadcast = () => {
   return (
     <div>
       <h2>Start Broadcasting</h2>
-      <video ref={videoRef} width="640" height="360" autoPlay muted></video>
+      <video
+        ref={videoRef}
+        width='640'
+        height='360'
+        autoPlay
+        muted
+      ></video>
       <br />
-      <button onClick={startRecording} disabled={recording}>
+      <button
+        onClick={startRecording}
+        disabled={recording}
+      >
         {recording ? 'Broadcasting...' : 'Start Broadcasting'}
       </button>
     </div>
@@ -87,5 +103,3 @@ const StartBroadcast = () => {
 };
 
 export default StartBroadcast;
-
-
